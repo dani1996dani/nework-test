@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+
 
 const RoomItem = ({ room }) => {
-    const { containerStyle } = styles;
+    const { containerStyle, roomTitleStyle } = styles;
+    const {id, name } = room;
 
     return(
-        <View style={containerStyle}>
-            <Text>Room Item</Text>
-        </View>
+        <TouchableOpacity style={containerStyle} onPress={() => {console.log("Pressed " + name);}}>
+            <Text style={roomTitleStyle}>{name}</Text>
+        </TouchableOpacity>
     );
 }
 
@@ -23,7 +25,14 @@ const styles = {
         shadowOpacity: 0.2,
         shadowOffset: {width:0, height: 2},
         backgroundColor:'white',
-        alignItems:'center'
+        alignItems:'center',
+        justifyContent: 'center'
+    },
+    roomTitleStyle:{
+        fontSize:20,
+        fontWeight:'600',
+        paddingTop:5,
+        color: 'black'
     }
 }
 

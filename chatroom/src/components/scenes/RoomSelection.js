@@ -5,38 +5,48 @@ import RoomItem from '../RoomItem';
 import firebase from 'firebase';
 
 
-class RoomSelection extends Component{
+class RoomSelection extends Component {
 
     state = {
         rooms: []
     }
 
-    componentWillMount(){
+    componentWillMount() {
         let roomRef = firebase.database().ref('rooms');
-        roomRef.once('value').then(function(snapshot) {
+        let thisRef = this;
+        roomRef.once('value').then(function (snapshot) {
             //console.log(snapshot.val());
             let snapObject = snapshot.val();
-
             let roomArray = [];
+
             for (let key in snapObject) {
                 if (snapObject.hasOwnProperty(key)) {
                     roomArray.push(snapObject[key]);
                 }
             }
-            //console.log(roomArray);
+            thisRef.setState({
+                rooms: roomArray
+            });
         });
+
     }
 
-    render(){
-        return(
-            <ScrollView style={{flex: 1}}>
-                <RoomItem/>
-                <RoomItem/>
-                <RoomItem/>
-                <RoomItem/>
-                <RoomItem/>
-                <RoomItem/>
-                <RoomItem/>
+    renderRooms() {
+        return (
+            this.state.rooms.map((room) => {
+                return (
+                    <View key={room.id}>
+                        <RoomItem room={room}/>
+                    </View>
+                );
+            })
+        );
+    }
+
+    render() {
+        return (
+            <ScrollView style={{ flex: 1 }}>
+                {this.renderRooms()}
             </ScrollView>
         );
     }
