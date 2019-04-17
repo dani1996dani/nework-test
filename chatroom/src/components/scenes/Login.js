@@ -7,7 +7,6 @@ import firebase from 'firebase';
 
 class Login extends Component {
 
-
     state = {
         email: '',
         password: '',
@@ -31,13 +30,11 @@ class Login extends Component {
     }
 
     loginSuccess = () => {
-        this.unlockUI();
         console.log("Successfully logged in");
         Actions.chatGroup();
     }
 
     signupSuccess = (data) => {
-        this.unlockUI();
         console.log("Successfully signed up");
         console.log(data);
         Actions.chatGroup();
@@ -76,14 +73,8 @@ class Login extends Component {
         this.lockUI();
         const { email, password } = this.state;
 
-        //old
-        
-        // firebase.auth().createUserWithEmailAndPassword(email, password).
-        //     then(this.signupSuccess.bind(this)).catch(this.signupError.bind(this));
-        
-
         firebase.auth().createUserWithEmailAndPassword(email, password).
-            then(this.signupSuccess.bind(this)).catch((error) => {this.signupError(error);});
+            then(this.signupSuccess.bind(this)).catch((error) => { this.signupError(error); });
     }
 
     renderButtons = () => {
@@ -105,8 +96,8 @@ class Login extends Component {
         if (this.state.error) {
             return (
                 <CardSection>
-                    <View style={{flex:1, alignItems:'center'}}>
-                        <Text style={{color:'red'}}>{this.state.error}</Text>
+                    <View style={{ flex: 1, alignItems: 'center' }}>
+                        <Text style={{ color: 'red' }}>{this.state.error}</Text>
                     </View>
                 </CardSection>);
         } else {
@@ -116,20 +107,20 @@ class Login extends Component {
 
     render() {
         return (
-            <View>
-                <Card>
-                    <CardSection>
-                        <Input editable={!this.state.uiLocked} placeholder='user@gmail.com' onChangeText={(email) => { this.setEmailState(email); }} value={this.state.email} label="Email"></Input>
-                    </CardSection>
-                    <CardSection>
-                        <Input editable={!this.state.uiLocked} secure={true} placeholder='password' onChangeText={(password) => { this.setPasswordState(password); }} value={this.state.password} label="Password"></Input>
-                    </CardSection>
 
-                    {this.renderButtons()}
-                    {this.renderError()}
+            <Card>
+                <CardSection>
+                    <Input editable={!this.state.uiLocked} placeholder='user@gmail.com' onChangeText={(email) => { this.setEmailState(email); }} value={this.state.email} label="Email"></Input>
+                </CardSection>
+                <CardSection>
+                    <Input editable={!this.state.uiLocked} secure={true} placeholder='password' onChangeText={(password) => { this.setPasswordState(password); }} value={this.state.password} label="Password"></Input>
+                </CardSection>
 
-                </Card>
-            </View>
+                {this.renderButtons()}
+                {this.renderError()}
+
+            </Card>
+
         );
     }
 }

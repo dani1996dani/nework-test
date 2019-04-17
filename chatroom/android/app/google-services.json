@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "113981574782",
+    "firebase_url": "https://nework-test.firebaseio.com",
+    "project_id": "nework-test",
+    "storage_bucket": "nework-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113981574782:android:9a597395706012fd",
+        "android_client_info": {
+          "package_name": "com.chatroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "113981574782-okrvj7rm4h2tvm7mae2oa2cogqattvhg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAG3Ei9VQmU7SIlCgp9ETh0icIZx1ZAJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "113981574782-okrvj7rm4h2tvm7mae2oa2cogqattvhg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

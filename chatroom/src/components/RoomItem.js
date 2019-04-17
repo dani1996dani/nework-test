@@ -2,12 +2,12 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
 
-const RoomItem = ({ room }) => {
+const RoomItem = ({ room, onPress }) => {
     const { containerStyle, roomTitleStyle } = styles;
     const {id, name } = room;
 
     return(
-        <TouchableOpacity style={containerStyle} onPress={() => {console.log("Pressed " + name);}}>
+        <TouchableOpacity style={containerStyle} onPress={onPress}>
             <Text style={roomTitleStyle}>{name}</Text>
         </TouchableOpacity>
     );
