@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-
+//a component that is rendered once for each room in the room selection screen.
 const RoomItem = ({ room, onPress }) => {
     const { containerStyle, roomTitleStyle } = styles;
     const {id, name } = room;

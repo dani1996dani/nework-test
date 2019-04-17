@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+//a single message item that is displayed in the chat room.
 const MessageItem = ({ mine,message }) => {
 
     const { containerStyle, messageTextStyle, myMessageStyle, othersMessageStyle } = styles;

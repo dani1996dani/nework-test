@@ -12,11 +12,12 @@ class RoomSelection extends Component {
         rooms: []
     }
 
+    //get a refrence to the rooms stored in the database.
     componentDidMount() {
         let roomRef = firebase.database().ref('rooms');
         let thisRef = this;
         roomRef.once('value').then(function (snapshot) {
-            //console.log(snapshot.val());
+            
             let snapObject = snapshot.val();
             let roomArray = [];
 
@@ -32,10 +33,12 @@ class RoomSelection extends Component {
 
     }
 
+    //send the user to a specific room.
     openRoomChat(room){
         Actions.roomChat({room: room,title:room.name+ " Chat"});
     }
 
+    //render the rooms, or a loading message while the rooms are being fetched from the database.
     renderRooms() {
 
         if (this.state.rooms.length == 0)
@@ -45,8 +48,7 @@ class RoomSelection extends Component {
                     </View>
                 );
 
-        return (
-            
+        return (    
             this.state.rooms.map((room) => {
                 return (
                     <View key={room.id}>

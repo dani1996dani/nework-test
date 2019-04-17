@@ -21,7 +21,7 @@ class Login extends Component {
         this.setState({ password: password });
     }
 
-
+    //notifys the user of a login error.
     loginError = (error) => {
         this.unlockUI();
         this.setState({
@@ -29,38 +29,38 @@ class Login extends Component {
         });
     }
 
+    //sends the user to the room selection screen.
     loginSuccess = () => {
-        console.log("Successfully logged in");
         Actions.chatGroup();
     }
 
+    //sends the user to the room selection screen.
     signupSuccess = (data) => {
-        console.log("Successfully signed up");
-        console.log(data);
         Actions.chatGroup();
     }
 
     signupError = (error) => {
         this.unlockUI();
-        console.log(error);
         this.setState({
             error: error.message
         });
     }
 
+    //lock ui so the user will not alter the data while some long operation happens.
     lockUI = () => {
         this.setState({
             uiLocked: true,
             error: ''
         });
     }
-
+    //unlock the ui so the user can use it again.
     unlockUI = () => {
         this.setState({
             uiLocked: false
         });
     }
 
+    //attempting to login. the ui will be locked while doing so, and a spinner will be displayed.
     loginAttempt = () => {
         this.lockUI();
         const { email, password } = this.state;
@@ -69,6 +69,7 @@ class Login extends Component {
             then(this.loginSuccess.bind(this)).catch(this.loginError.bind(this));
     }
 
+    //attempting to sign up.
     signupAttempt = () => {
         this.lockUI();
         const { email, password } = this.state;
@@ -77,6 +78,8 @@ class Login extends Component {
             then(this.signupSuccess.bind(this)).catch((error) => { this.signupError(error); });
     }
 
+    //conditional rendering - if the ui is locked - show a spinner to notify the user of an action happening in the background. 
+    //Otherwise show the login and signup buttons.
     renderButtons = () => {
         if (this.state.uiLocked)
             return (
@@ -92,6 +95,7 @@ class Login extends Component {
         );
     }
 
+    //shows the user an error if an error occured.
     renderError = () => {
         if (this.state.error) {
             return (
@@ -107,7 +111,6 @@ class Login extends Component {
 
     render() {
         return (
-
             <Card>
                 <CardSection>
                     <Input editable={!this.state.uiLocked} placeholder='user@gmail.com' onChangeText={(email) => { this.setEmailState(email); }} value={this.state.email} label="Email"></Input>
@@ -118,9 +121,7 @@ class Login extends Component {
 
                 {this.renderButtons()}
                 {this.renderError()}
-
             </Card>
-
         );
     }
 }

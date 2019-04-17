@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput,TouchableOpacity, Text } from 'react-native';
 
-
+//this component appears in a specific chatroom, as the text input and button.
 const ChatInput = ({ onSend, onChangeText, value }) => {
 
     const { sendButtonStyle,textInputStyle, buttonTextStyle } = styles;

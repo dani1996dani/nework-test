@@ -27,6 +27,8 @@ class App extends Component {
         };
         firebase.initializeApp(config);
 
+        //if the user is logged in, send him directly to the room selection screen.
+        //otherwise, send him to the login screen.
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 Actions.chatGroup();

@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import firebase from 'react-native-firebase';
 import axios from 'axios';
+
 import { Actions } from 'react-native-router-flux';
-
-
-
 import { View, Text, ScrollView, TextInput } from 'react-native';
-import { Card, CardSection, Input, Button } from '../common';
 import ChatInput from './../ChatInput';
 import MessageItem from './../MessageItem';
-
-
 
 class RoomChat extends Component {
 
@@ -20,12 +15,25 @@ class RoomChat extends Component {
         typedMessage: ''
     }
 
+    initMessageListener = () => {
+        const roomName = this.props.room.name;
+        firebase.messaging().subscribeToTopic(roomName);
+
+        this.messageListener = firebase.messaging().onMessage((message) => {
+            // Process your message as required
+            console.log(message.data);
+            this.setState({
+                messages: [...this.state.messages, message.data]
+            });
+        });
+    }
+
     componentDidMount() {
         const roomName = this.props.room.name;
-        //Actions.refresh({"title": roomName});
+
         let thisRef = this;
         firebase.messaging().getToken().then(token => {
-            console.log(token);
+            //console.log(token);
             thisRef.setState({
                 myId: token
             });
@@ -34,43 +42,37 @@ class RoomChat extends Component {
             .then(enabled => {
                 if (enabled) {
                     // user has permissions
-                    console.log("has permminsion");
+                    thisRef.initMessageListener();
                 } else {
-                    console.log("doesnt have permminsion");
                     // user doesn't have permission
                     firebase.messaging().requestPermission()
                         .then(() => {
                             // User has authorised  
+                            thisRef.initMessageListener();
                         })
                         .catch(error => {
-                            // User has rejected permissions  
+                            // User has rejected permissions, send the user back to room selection.
+                            Actions.roomSelection();
                         });
                 }
             });
-
-        firebase.messaging().subscribeToTopic(roomName);
-
-        this.messageListener = firebase.messaging().onMessage((message) => {
-            // Process your message as required
-            console.log(message.data);
-            thisRef.setState({
-                messages: [...this.state.messages, message.data]
-            });
-        });
-
-        this.notificationListener = firebase.notifications().onNotification((notification) => {
-            // Process your notification as required
-            console.log(notification);
-        });
+        // this.notificationListener = firebase.notifications().onNotification((notification) => {
+        //     // Process your notification as required
+        //     console.log(notification);
+        // });
     }
 
     componentWillUnmount() {
+        //unsubsribe from the topic and nulify the listener (to prevent multiple listeners on re-entrance).
         const roomName = this.props.room.name;
         firebase.messaging().unsubscribeFromTopic(roomName);
         this.messageListener();
-        console.log("unsubbed from " + roomName);
     }
 
+    //sends an fcm message to the google servers.
+    //
+    //usually this would occur on the server-side (due to the face we are exposing the server key here)..
+    //however,because this is a test and not a real life application, the message is sent from the client directly.
     sendMessage = () => {
         const date = new Date();
         axios({
@@ -88,22 +90,18 @@ class RoomChat extends Component {
                     timeSent: date.getTime()
                 }
             }
-        }).catch(err => {console.log("Error",err)});
+        }).
+            then(() => {
+                this.setState({
+                    typedMessage: ''
+                });
+            }).
+            catch(err => { console.log("Error", err) });
 
-        this.setState({
-            typedMessage: ''
-        });
-    }
-
-    formatTime = (milliseconds) => {
-
-        minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
-        hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
-
-        return `${hours}:${minutes}`;
 
     }
 
+    //rendering the messages in the state, or a welcome screen if no messages were recevied yet.
     renderMessageItems() {
 
         if (this.state.messages.length == 0)
@@ -116,16 +114,12 @@ class RoomChat extends Component {
 
         return this.state.messages.map(message => {
             const isMine = (message.senderId === this.state.myId);
-            message.formattedTime = this.formatTime(message.timeSent);
-            
 
             return (
                 <MessageItem key={message.timeSent} mine={isMine} message={message} />
             );
         });
     }
-
-
 
     render() {
         return (
